@@ -1,50 +1,81 @@
 <script lang="ts">
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
 
-  let hello = "HELLO";
+  // Quiz api site: https://opentdb.com/api_config.php
+
+  interface topics {
+    name: string,
+    index: number
+  }
+
+  let topic = "";
+
+  const topics = [
+    {
+      name: "Sports",
+      index: 21
+    },
+    {
+      name: "History",
+      index: 23
+    },
+    {
+      name: "Animals",
+      index: 27
+    },
+    {
+      name: "Celebrities",
+      index: 26
+    }
+  ]
+
+  const findCategoryIndex = (array: Array<topics>, name: String) => {
+    const found = array.find(item => item.name === name)
+    return found ? found.index : null
+  }
+
+  
+  
+  
+  let difficulty = "";
+  
+  const fetchQuiz = () => {
+    // https://opentdb.com/api.php?amount=10&category=21&difficulty=medium&type=multiple
+    
+    const category = findCategoryIndex(topics, topic)
+  
+    
+  console.log(`https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=multiple`)
+}
 </script>
 
 <main>
-  <div>
-    <a href="https://vite.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
+<h1>Quiz app!</h1>
+ 
+<div>
+  <p>Get started by choosing a topic for the quiz</p>
+    <select name="topics" id="topics" bind:value={topic}>
+      <option value="Sports">Sports</option>
+      <option value="History">History</option>
+      <option value="Animals">Animals</option>
+      <option value="Celebrities">Celebrities</option>
+    </select>
 
-  <div class="card">
-    <Counter />
-  </div>
+    <div>
+      <p>Now chose the difficulty</p>
+          <select name="topics" id="topics" bind:value={difficulty}>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+    </select>
+    </div>
+</div>
 
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
+<div>
+  <button onclick={fetchQuiz}>Start Quiz</button>
+</div>
 
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-    
-  </p>
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
+ 
 </style>
