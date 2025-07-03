@@ -1,3 +1,5 @@
+export type GameState = 'start' | 'play' | 'end-screen';
+
 export interface categories {
   name: string;
   index: number;
