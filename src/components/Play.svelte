@@ -1,10 +1,11 @@
 <script lang="ts">
-  import type { quizResponse, quizResult, categories } from "../utils/type";
+  import type { quizResult, categories } from "../utils/type";
   import { fetchQuiz } from "../utils/fetch";
   // Quiz api site: https://opentdb.com/api_config.php
 
   
-let topic = '';
+let topic = $state("");
+
 
 const topics = [
   {
@@ -25,28 +26,78 @@ const topics = [
   },
 ];
 
+let difficulty = $state("");
+let questions = $state<quizResult[]>([]);
+let correctChoice = $state<string[]>([])
+let shuffledAnswers = $state<string[][]>([]);
+let gameTick = $state(0);
+let showScore = $state(false);
+
 const findCategoryIndex = (array: Array<categories>, name: String) => {
   const found = array.find((item) => item.name === name);
   return found ? found.index : null;
 };
 
-let difficulty = '';
-let questions: quizResult[] = [];
+// Fisher-Yates shuffle algorithm
+ function shuffle(array: string[]) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
 
 const handleClick = async () => {
-  console.log("ran");
  let category = findCategoryIndex(topics, topic); // update category based on current topic
   if (category !== null) {
     questions = await fetchQuiz(category, difficulty);
+     // For each question, combine and shuffle answers
+      shuffledAnswers = questions.map(q =>
+        shuffle([q.correct_answer, ...q.incorrect_answers])
+      );
   } else {
     questions = [];
+    shuffledAnswers = [];
     alert("Please select a valid topic.");
   }
 }
+
+
+
+const compareAnswer = (questionIndex: number, answer: string) => {
+  console.log("item: ", answer)
+
+  if (questions[questionIndex].correct_answer === answer) {
+      console.log("Correct choice!");
+      correctChoice.push(answer);
+    } else {
+      console.log("Wrong choice!");
+    }
+    gameTick++;
+
+}
+
+
+$effect(() => {
+  $inspect("correct_answer: ", correctChoice)
+    $inspect("gameTick: ", gameTick)
+    if(gameTick === 10) {
+      showScore = true
+      console.log("showScore:", showScore )
+    }
+})
+
+
 </script>
 
 <main>
- 
+ {#if showScore == true}
+  <div>You won!</div>
+ {/if}
 <div>
   <h2>Get started by choosing a topic for the quiz</h2>
     <select name="topics" id="topics" bind:value={topic}>
@@ -74,18 +125,16 @@ const handleClick = async () => {
   <h2>Questions</h2>
   <div>
     {#if questions}
-      {#each questions as question}
+      {#each questions as question, i}
       <div class="question-contrainer">
         <h2>{@html question.question}</h2>
         <p>{question.difficulty}</p>
       
        <div class="answers">
-
-         {#each question.incorrect_answers as answer}
-         <button class="answer" onclick={() => {console.log("clicked: ", answer )}}>{answer}</button>
+         {#each shuffledAnswers[i] as answer}
+         <button class="answer" onclick={() => compareAnswer(i, answer)}>{answer}</button>
          {/each}
         </div>
-        <p class="correct">{question.correct_answer}</p>
       </div>
       
       {/each}
