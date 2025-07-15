@@ -31,6 +31,8 @@ let questions = $state<quizResult[]>([]);
 let correctChoice = $state<string[]>([])
 let shuffledAnswers = $state<string[][]>([]);
 let gameTick = $state(0);
+let highScore = $state(0)
+let score = $state(0);
 let showScore = $state(false);
 
 const findCategoryIndex = (array: Array<categories>, name: String) => {
@@ -59,6 +61,7 @@ const handleClick = async () => {
       shuffledAnswers = questions.map(q =>
         shuffle([q.correct_answer, ...q.incorrect_answers])
       );
+      highScore = questions.length
   } else {
     questions = [];
     shuffledAnswers = [];
@@ -86,6 +89,7 @@ $effect(() => {
   $inspect("correct_answer: ", correctChoice)
     $inspect("gameTick: ", gameTick)
     if(gameTick === 10) {
+      score = correctChoice.length;
       showScore = true
       console.log("showScore:", showScore )
     }
@@ -96,7 +100,11 @@ $effect(() => {
 
 <main>
  {#if showScore == true}
-  <div>You won!</div>
+  <div>
+    <h2>
+      You got {score} / {highScore}
+    </h2>
+  </div>
  {/if}
 <div>
   <h2>Get started by choosing a topic for the quiz</h2>
