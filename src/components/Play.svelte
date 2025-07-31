@@ -34,6 +34,7 @@ let gameTick = $state(0);
 let highScore = $state(0)
 let score = $state(0);
 let showScore = $state(false);
+let selectedAnswer = $state("")
 
 const findCategoryIndex = (array: Array<categories>, name: String) => {
   const found = array.find((item) => item.name === name);
@@ -73,6 +74,7 @@ const handleClick = async () => {
 
 const compareAnswer = (questionIndex: number, answer: string) => {
   console.log("item: ", answer)
+  selectedAnswer = answer
 
   if (questions[questionIndex].correct_answer === answer) {
       console.log("Correct choice!");
@@ -81,6 +83,8 @@ const compareAnswer = (questionIndex: number, answer: string) => {
       console.log("Wrong choice!");
     }
     gameTick++;
+
+    console.log("selectedAnswer: ", selectedAnswer)
 
 }
 
@@ -140,7 +144,7 @@ $effect(() => {
       
        <div class="answers">
          {#each shuffledAnswers[i] as answer}
-         <button class="answer" onclick={() => compareAnswer(i, answer)}>{answer}</button>
+         <button class="answer {selectedAnswer === answer ? 'selected' : ''}  {selectedAnswer && answer === questions[i].correct_answer ? 'correct' : ''}" onclick={() => compareAnswer(i, answer)}>{answer}</button>
          {/each}
         </div>
       </div>
@@ -180,8 +184,13 @@ $effect(() => {
     cursor: pointer;
   }
 
+  .selected {
+    background-color: blue;
+  }
+
   .correct {
     background-color: green;
+    color: black;
   }
  
 </style>
