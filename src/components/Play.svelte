@@ -3,12 +3,13 @@
   import { fetchQuiz } from "../utils/fetch";
   // Quiz api site: https://opentdb.com/api_config.php
 
+      let {handleGameState, handleScore} = $props()
   
 let topic = $state("");
 
 
 const topics = [
-  {
+{
     name: 'Sports',
     index: 21,
   },
@@ -88,7 +89,9 @@ $effect(() => {
     $inspect("gameTick: ", gameTick)
     if(gameTick === 10) {
       score = correctChoice.length;
+      handleScore(correctChoice.length)
       showScore = true
+      handleGameState('end-screen')
     }
 })
 

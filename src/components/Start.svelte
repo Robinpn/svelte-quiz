@@ -1,12 +1,12 @@
 <script lang="ts">
 
-    let {onStart} = $props()
+    let {handleGameState} = $props()
 
 </script>
 
 <main>
     <h1>Quiz</h1>
-    <button class="play" onclick={onStart}>Play!</button>
+    <button class="play" onclick={() => handleGameState("play")}>Play!</button>
 </main>
 
 
