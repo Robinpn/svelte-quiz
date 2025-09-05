@@ -106,7 +106,7 @@ $effect(() => {
     </h2>
   </div>
  {/if}
-<div>
+<div class="select-container">
   <h2>Get started by choosing a topic for the quiz</h2>
     <select name="topics" id="topics" bind:value={topic}>
       <option value="Sports">Sports</option>
@@ -126,7 +126,7 @@ $effect(() => {
 </div>
 
 <div>
-  <button onclick={handleClick}>Start Quiz</button>
+  <button class="start-button" onclick={handleClick}>Start Quiz</button>
 </div>
 
 <section>
@@ -152,6 +152,17 @@ $effect(() => {
 </main>
 
 <style>
+.select-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.start-button {
+  margin-top: 1rem;
+}
+
   .question-contrainer {
     border: 1px solid red;
   }
@@ -167,8 +178,8 @@ $effect(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
-    height: 50px;
+    min-width: 150px;
+    min-height: 50px;
     color: black;
     background-color: bisque;
     border: 1px solid black;
