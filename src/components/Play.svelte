@@ -37,7 +37,7 @@ let score = $state(0);
 let showScore = $state(false);
 let selectedAnswers = $state<string[]>([])
 
-const findCategoryIndex = (array: Array<categories>, name: String) => {
+const findCategoryIndex = (array: Array<categories>, name: string) => {
   const found = array.find((item) => item.name === name);
   return found ? found.index : null;
 };
@@ -91,7 +91,9 @@ $effect(() => {
       score = correctChoice.length;
       handleScore(correctChoice.length)
       showScore = true
-      handleGameState('end-screen')
+      setTimeout(() => {
+        handleGameState('end-screen')
+      },500)
     }
 })
 
@@ -99,35 +101,32 @@ $effect(() => {
 </script>
 
 <main>
- {#if showScore == true}
-  <div>
-    <h2>
-      You got {score} / {highScore}
-    </h2>
-  </div>
- {/if}
-<div class="select-container">
-  <h2>Get started by choosing a topic for the quiz</h2>
-    <select name="topics" id="topics" bind:value={topic}>
-      <option value="Sports">Sports</option>
-      <option value="History">History</option>
-      <option value="Animals">Animals</option>
-      <option value="Celebrities">Celebrities</option>
-    </select>
+  {#if questions.length > 1}
+  <div></div>
+  {:else}
+  <div class="select-container">
+<p>Get started by choosing a topic for the quiz</p>
+  <select name="topics" id="topics" bind:value={topic}>
+    <option value="Sports">Sports</option>
+    <option value="History">History</option>
+    <option value="Animals">Animals</option>
+    <option value="Celebrities">Celebrities</option>
+  </select>
 
-    <div>
-      <p>Now chose the difficulty</p>
-          <select name="topics" id="topics" bind:value={difficulty}>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-    </select>
-    </div>
+  <div>
+    <p>Now chose the difficulty</p>
+        <select name="topics" id="topics" bind:value={difficulty}>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+  </select>
+  </div>
 </div>
 
 <div>
   <button class="start-button" onclick={handleClick}>Start Quiz</button>
 </div>
+  {/if}
 
 <section>
   <h2>Questions</h2>
@@ -157,6 +156,7 @@ $effect(() => {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+
 }
 
 .start-button {
@@ -164,7 +164,13 @@ $effect(() => {
 }
 
   .question-contrainer {
-    border: 1px solid red;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 10px 10px;
+    margin: 1rem;
+    width: 25rem;
+    box-shadow: 0px 0px 5px black;
+    padding: 0.5rem;
   }
 
   .answers {
@@ -198,6 +204,18 @@ $effect(() => {
   .correct {
     background-color: green;
     color: black;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .select-container select {
+      width: 100px;
+      height: 30px;
+      font-size: 0.9rem;
+    }
+    .question-contrainer {
+      max-width: 18rem;
+      margin: 1rem, 0.5rem;
+    }
   }
  
 </style>

@@ -65,7 +65,7 @@ button {
 }
 button:hover {
   border-color: #090909;
-  transform: scale(1.2);
+  transform: scale(1.1);
   box-shadow: none;
 }
 button:focus,
